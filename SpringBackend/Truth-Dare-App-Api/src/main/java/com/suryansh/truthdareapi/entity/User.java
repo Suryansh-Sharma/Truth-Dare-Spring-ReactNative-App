@@ -20,6 +20,7 @@ public class User {
     private String username;
     private String password;
     private String email;
+    private boolean isVerified;
     @ManyToMany(fetch = FetchType.LAZY,mappedBy = "user")
     private Set<Quiz> quiz;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

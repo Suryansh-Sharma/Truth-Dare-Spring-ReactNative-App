@@ -3,10 +3,12 @@ package com.suryansh.truthdareapi.service.impl;
 import com.suryansh.truthdareapi.dto.GroupDto;
 import com.suryansh.truthdareapi.dto.QuizDto;
 import com.suryansh.truthdareapi.dto.ResultDto;
+import com.suryansh.truthdareapi.dto.UserLoginDto;
 import com.suryansh.truthdareapi.entity.Quiz;
 import com.suryansh.truthdareapi.entity.Result;
 import com.suryansh.truthdareapi.entity.User;
 import com.suryansh.truthdareapi.exception.TruthDareException;
+import com.suryansh.truthdareapi.model.LoginModel;
 import com.suryansh.truthdareapi.model.UserModel;
 import com.suryansh.truthdareapi.repository.ResultRepository;
 import com.suryansh.truthdareapi.repository.UserRepository;
@@ -33,23 +35,28 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public String registerNewUser(UserModel userModel) {
+    public UserLoginDto registerNewUser(UserModel userModel) {
         Optional<User> userCheck = userRepository
                 .findByEmail(userModel.getEmail());
         if (userCheck.isPresent())
             throw new TruthDareException("User email is already present !!");
-        User user = User.builder()
+        var newUser = User.builder()
                 .username(userModel.getUsername())
                 .email(userModel.getEmail())
                 .password(userModel.getPassword())
+                .isVerified(false)
                 .build();
         try {
-            userRepository.save(user);
+            userRepository.save(newUser);
+            log.info("User {} is saved in database ",newUser.getUsername());
+            var user = userRepository.findByEmail(userModel.getEmail())
+                    .orElseThrow(()->new TruthDareException("Unable to find user "+userModel.getEmail()));
+            return new UserLoginDto(user.getUsername(), user.getEmail(), false,"");
+
         }catch (Exception e){
             log.error("Unable to save user ",e);
             throw new TruthDareException("Unable to save user !!");
         }
-        return null;
     }
 
     @Override
@@ -95,5 +102,19 @@ public class UserServiceImpl implements UserService {
                         ,val.getTotalMarks(),val.getShowResultToAll(),val.getCreatedBy()))
                 .toList();
 
+    }
+
+    @Override
+    public UserLoginDto getLoginDataFromDb(LoginModel model) {
+        var user = userRepository.findByEmail(model.getEmail())
+                .orElseThrow(()->new TruthDareException("Wrong Username and Password: "+model.getEmail()));
+        return new UserLoginDto(user.getUsername(),user.getEmail(),user.isVerified(),"token");
+    }
+
+    @Override
+    public boolean checkIsUserVerified(String email) {
+        var user = userRepository.findByEmail(email)
+                .orElseThrow(()->new TruthDareException("Wrong Username and Password: "+email));
+        return user.isVerified();
     }
 }

@@ -1,23 +1,57 @@
 import { NavigationContainer } from "@react-navigation/native";
-import { StyleSheet } from "react-native";
+import { useContext, useEffect, useState } from "react";
 import { RootSiblingParent } from "react-native-root-siblings";
+import Loader from "./components/Loader";
+import LoginNavigation from "./navigation/LoginNavigation";
 import Navigation from "./navigation/Navigation";
-export default function App() {
+import Context, { TruthDareContext } from "./context/Context";
+import * as SecureStore from "expo-secure-store";
+import AccountVerification from "./components/AccountVerification";
+function App() {
+  const [isLoading, setLoading] = useState();
+  const { isLogin, setLogin, setUsername, setEmail, setJwt, isVerified ,setIsVerified} =
+    useContext(TruthDareContext);
+  useEffect(() => {
+    setLoading(true);
+    getUserData();
+  }, []);
+  useEffect(() => {}, [isLoading]);
+  const getUserData = async () => {
+    let Login = await SecureStore.getItemAsync("isLogin");
+    if (Login === "true") {
+      let username = await SecureStore.getItemAsync("username");
+      let email = await SecureStore.getItemAsync("email");
+      let jwt = await SecureStore.getItemAsync("jwt");
+      let isVerified = await SecureStore.getItemAsync("isVerified");
+      setEmail(email);
+      setJwt(jwt);
+      setUsername(username);
+      setLogin(true);
+      if(isVerified==="true")
+        setIsVerified(true);
+      else 
+        setIsVerified(false);
+    } 
+    else{ 
+      setLogin(false);
+    }
+    setLoading(false);
+  };
+  if (isLoading) return <Loader></Loader>;
+  if(!isVerified && isLogin)return <AccountVerification/>
   return (
     // <AccountVerification/>
     <RootSiblingParent>
       <NavigationContainer independent={true}>
-        <Navigation />
+        {isLogin === true ? <Navigation /> : <LoginNavigation />}
       </NavigationContainer>
     </RootSiblingParent>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
+export default () => {
+  return (
+    <Context>
+      <App />
+    </Context>
+  );
+};

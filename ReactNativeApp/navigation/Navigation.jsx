@@ -14,11 +14,7 @@ function Navigation() {
     return (
         <Stack.Navigator
         >
-            <Stack.Screen name="Home" component={Screen1} 
-                options={{
-                    headerShown:false
-                }}
-            />
+
             <Stack.Screen name="mainScreen" component={Screen2} 
                 options={{
                     headerShown:false

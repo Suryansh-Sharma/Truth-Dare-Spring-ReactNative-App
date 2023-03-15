@@ -3,6 +3,7 @@ package com.suryansh.truthdareapi.advice;
 import com.suryansh.truthdareapi.exception.TruthDareException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -30,4 +31,9 @@ public class SpringExceptionHandler {
     public String handleTruthDareException(TruthDareException exception){
         return "Exception: "+exception.getMessage();
     }
+//    @ResponseStatus(HttpStatus.NOT_FOUND)
+//    @ExceptionHandler(UsernameNotFoundException.class)
+//    public String handleUserNotFoundException(UsernameNotFoundException exception){
+//        return "Exception: "+exception.getMessage();
+//    }
 }

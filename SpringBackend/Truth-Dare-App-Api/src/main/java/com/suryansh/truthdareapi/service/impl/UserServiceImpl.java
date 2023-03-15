@@ -3,24 +3,19 @@ package com.suryansh.truthdareapi.service.impl;
 import com.suryansh.truthdareapi.dto.GroupDto;
 import com.suryansh.truthdareapi.dto.QuizDto;
 import com.suryansh.truthdareapi.dto.ResultDto;
-import com.suryansh.truthdareapi.dto.UserLoginDto;
 import com.suryansh.truthdareapi.entity.Quiz;
 import com.suryansh.truthdareapi.entity.Result;
 import com.suryansh.truthdareapi.entity.User;
 import com.suryansh.truthdareapi.exception.TruthDareException;
-import com.suryansh.truthdareapi.model.LoginModel;
-import com.suryansh.truthdareapi.model.UserModel;
 import com.suryansh.truthdareapi.repository.ResultRepository;
 import com.suryansh.truthdareapi.repository.UserRepository;
 import com.suryansh.truthdareapi.service.UserService;
-import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.ocpsoft.prettytime.PrettyTime;
 import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Slf4j
@@ -33,31 +28,7 @@ public class UserServiceImpl implements UserService {
         this.resultRepository = resultRepository;
     }
 
-    @Override
-    @Transactional
-    public UserLoginDto registerNewUser(UserModel userModel) {
-        Optional<User> userCheck = userRepository
-                .findByEmail(userModel.getEmail());
-        if (userCheck.isPresent())
-            throw new TruthDareException("User email is already present !!");
-        var newUser = User.builder()
-                .username(userModel.getUsername())
-                .email(userModel.getEmail())
-                .password(userModel.getPassword())
-                .isVerified(false)
-                .build();
-        try {
-            userRepository.save(newUser);
-            log.info("User {} is saved in database ",newUser.getUsername());
-            var user = userRepository.findByEmail(userModel.getEmail())
-                    .orElseThrow(()->new TruthDareException("Unable to find user "+userModel.getEmail()));
-            return new UserLoginDto(user.getUsername(), user.getEmail(), false,"");
 
-        }catch (Exception e){
-            log.error("Unable to save user ",e);
-            throw new TruthDareException("Unable to save user !!");
-        }
-    }
 
     @Override
     public List<GroupDto> getAllUserGroups(String userEmail) {
@@ -104,17 +75,4 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    @Override
-    public UserLoginDto getLoginDataFromDb(LoginModel model) {
-        var user = userRepository.findByEmail(model.getEmail())
-                .orElseThrow(()->new TruthDareException("Wrong Username and Password: "+model.getEmail()));
-        return new UserLoginDto(user.getUsername(),user.getEmail(),user.isVerified(),"token");
-    }
-
-    @Override
-    public boolean checkIsUserVerified(String email) {
-        var user = userRepository.findByEmail(email)
-                .orElseThrow(()->new TruthDareException("Wrong Username and Password: "+email));
-        return user.isVerified();
-    }
 }

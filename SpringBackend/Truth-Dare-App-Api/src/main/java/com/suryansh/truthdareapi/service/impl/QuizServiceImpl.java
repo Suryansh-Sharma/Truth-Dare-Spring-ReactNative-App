@@ -137,7 +137,7 @@ public class QuizServiceImpl implements QuizService {
         Result result = new Result();
         result.setResultAnsList(resultAnsList);
         result.setPoints(score);
-        result.setUserName(user.getUsername());
+        result.setUserName(user.getUserAppName());
         result.setUserEmail(user.getEmail());
         result.setQuiz(quiz);
         quiz.getUser().add(user);

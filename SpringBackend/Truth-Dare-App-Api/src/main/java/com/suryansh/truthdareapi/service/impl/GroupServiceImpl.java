@@ -62,7 +62,7 @@ public class GroupServiceImpl implements GroupService {
         groupMember.setUser(user);
         try{
             groupMemberRepository.save(groupMember);
-            log.info("User {} is added to group {}",user.getUsername(),group.getName()+":addUserToNewGroup");
+            log.info("User {} is added to group {}",user.getUserAppName(),group.getName()+":addUserToNewGroup");
         }catch (Exception e){
             log.error("Unable to save user to group :addUserToNewGroup",e);
             throw new TruthDareException("Unable to add user "+user+":addUserToNewGroup ");
@@ -89,7 +89,7 @@ public class GroupServiceImpl implements GroupService {
         groupMember.setUser(user);
         try{
             groupMemberRepository.save(groupMember);
-            log.info("User {} is added to group {}",user.getUsername(),group.getName());
+            log.info("User {} is added to group {}",user.getUserAppName(),group.getName());
         }catch (Exception e){
             log.error("Unable to save user to group ",e);
             throw new TruthDareException("Unable to add user "+model.getUserEmail()+":addUserToGroup ");
@@ -101,7 +101,7 @@ public class GroupServiceImpl implements GroupService {
         Group group = groupRepository.findById(groupId)
                 .orElseThrow(()->new TruthDareException("Unable to find group of id "+groupId));
         return group.getUsers().stream()
-                .map((val)-> new UserDto(val.getId(), val.getUser().getUsername()))
+                .map((val)-> new UserDto(val.getId(), val.getUser().getUserAppName()))
                 .toList();
     }
 

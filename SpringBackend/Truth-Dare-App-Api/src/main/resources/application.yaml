@@ -9,3 +9,6 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+
+secretKey: "6D5971337436763979244226452948404D635166546A576E5A7234753778217A"
+

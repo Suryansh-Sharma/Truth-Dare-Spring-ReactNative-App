@@ -10,4 +10,8 @@ public interface AuthService {
     UserLoginDto getLoginDataFromDb(LoginModel model);
 
     boolean checkIsUserVerified(String email);
+
+    void resendVerificationMail(String email);
+
+    String verifyUser(String token, String email);
 }

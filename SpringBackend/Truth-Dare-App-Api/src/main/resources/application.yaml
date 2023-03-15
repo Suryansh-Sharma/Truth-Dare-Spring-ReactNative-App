@@ -9,6 +9,16 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+  mail:
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: 'true'
+          auth: 'true'
+    host: smtp.gmail.com
+    username: suryanshsharmab@gmail.com
+    password: sfkuryuukctrxdto
+    port: '587'
 
 secretKey: "6D5971337436763979244226452948404D635166546A576E5A7234753778217A"
-

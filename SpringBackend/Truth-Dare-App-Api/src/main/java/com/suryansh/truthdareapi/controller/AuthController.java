@@ -33,9 +33,19 @@ public class AuthController {
         return authService.getLoginDataFromDb(model);
     }
 
+    @GetMapping("/account-verify/{email}/{token}")
+    public String verifyAccount(@PathVariable String email, @PathVariable String token) {
+        return authService.verifyUser(token, email);
+    }
+
     @GetMapping("/isVerified/{email}")
     public boolean checkIsVerified(@PathVariable String email) {
         return authService.checkIsUserVerified(email);
+    }
+
+    @PostMapping("/resend-verification-token/{email}")
+    public void resendToken(@PathVariable String email) {
+        authService.resendVerificationMail(email);
     }
 
 }

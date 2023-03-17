@@ -1,24 +1,36 @@
 spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/Truth-Dare-App
-    username: postgres
-    password: Suryansh@1904
+  config:
+#    This file you can ignore/remove it .
+    import: Secrets.yaml
+
+#    Spring Data base configuration un-comment and fill details while using
+
+#  datasource:
+#    url: jdbc:postgresql://localhost:5432/Truth-Dare-App
+#    username: your-username
+#    password: your-password
+
   jpa:
     hibernate:
       ddl-auto: update
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-  mail:
-    properties:
-      mail:
-        smtp:
-          starttls:
-            enable: 'true'
-          auth: 'true'
-    host: smtp.gmail.com
-    username: suryanshsharmab@gmail.com
-    password: sfkuryuukctrxdto
-    port: '587'
 
-secretKey: "6D5971337436763979244226452948404D635166546A576E5A7234753778217A"
+# Spring Mail Configuration un-comment and fill details while using
+
+#  mail:
+#    properties:
+#      mail:
+#        smtp:
+#          starttls:
+#            enable: 'true'
+#          auth: 'true'
+#    host: smtp.gmail.com
+#    username:  yourEmail
+#    password: yourEmailAppPassword
+#    port: '587'
+
+# JWT Secret Key
+
+#secretKey: ""

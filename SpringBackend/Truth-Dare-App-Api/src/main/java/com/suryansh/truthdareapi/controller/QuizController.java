@@ -7,6 +7,7 @@ import com.suryansh.truthdareapi.dto.ResultDto;
 import com.suryansh.truthdareapi.model.QuizModel;
 import com.suryansh.truthdareapi.model.SubmitQuizModel;
 import com.suryansh.truthdareapi.service.QuizService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
@@ -18,6 +19,7 @@ import java.util.List;
 @RequestMapping("api/quiz")
 @CrossOrigin("*")
 @Validated
+@SecurityRequirement(name = "bearerAuth")
 public class QuizController {
     private final QuizService quizService;
     public QuizController(QuizService quizService){

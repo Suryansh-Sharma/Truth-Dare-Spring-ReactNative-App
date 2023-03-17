@@ -10,13 +10,19 @@ const PreviousQuizScreen = ({navigation}) => {
     const [loading, setLoading] = useState(true);
     const [data, setData] = useState([]);
     const {isFocused} = useIsFocused(false);
-    const {email} = useContext(TruthDareContext);
+    const {email,jwt,baseUrl} = useContext(TruthDareContext);
     useEffect(() => {
         setLoading(true);
         loadPrevQuizData();
     }, [isFocused]);
     const loadPrevQuizData = async () => {
-        axios.get(`http://192.168.0.192:8080/api/user/getPreviousQuiz/${email}`)
+        axios.get(`${baseUrl}/api/user/getPreviousQuiz/${email}`
+        ,
+            {
+                headers:{
+                    Authorization: `Bearer ${jwt}`,
+                }
+            })
             .then(response => {
                 setData(response.data);
             })

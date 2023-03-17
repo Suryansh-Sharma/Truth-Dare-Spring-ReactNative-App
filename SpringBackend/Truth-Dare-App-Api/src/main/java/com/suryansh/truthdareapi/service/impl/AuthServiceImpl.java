@@ -66,7 +66,8 @@ public class AuthServiceImpl implements AuthService{
                 .sender("Truth-And-Dare-App")
                 .subject("Please verify your account.")
                 .recipient(model.getEmail())
-                .body("http://192.168.0.192:8080/api/auth/accountVerification/" + token)
+                .body("http://192.168.0.192:8080/api/auth/account-verify/"
+                        + model.getEmail() + "/" + token)
                 .build();
         mailService.sendAuthVerificationMail(email);
     }

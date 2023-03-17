@@ -16,7 +16,8 @@ const LoginScreen = ({navigation}) => {
         setUsername,
         setEmail,
         setIsVerified,
-        setJwt
+        setJwt,
+        baseUrl
     } = useContext(TruthDareContext);
     const handleLogin = () => {
         if (loginData.email.length == 0)
@@ -29,7 +30,7 @@ const LoginScreen = ({navigation}) => {
         }
     }
     const handleLoginApi = () => {
-        axios.post(`http://192.168.0.192:8080/api/user/login`, {
+        axios.post(`${baseUrl}/api/auth/login`, {
             email: loginData.email,
             password: loginData.password
         })
@@ -37,6 +38,7 @@ const LoginScreen = ({navigation}) => {
                 storeLoginData(response);
             })
             .catch(error => {
+                console.log(error);
                 alert(error.response.data);
             })
     }

@@ -1,14 +1,15 @@
 import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import axios from "axios";
 import Loader from "./Loader";
+import { TruthDareContext } from "../context/Context";
 
 const ShowUserRes = ({route, navigation}) => {
     const {resultId, quizId} = route.params;
     const [data, setData] = useState([]);
     const [currentPage, setCurrentPage] = useState(0);
     const [isPageLoading, setIsLoading] = useState(true);
-
+    const {baseUrl,jwt}=useContext(TruthDareContext);
     const handleNextClick = () => {
         if (currentPage < data.length - 1) {
             setCurrentPage(currentPage + 1);
@@ -20,8 +21,18 @@ const ShowUserRes = ({route, navigation}) => {
         setIsLoading(true);
         setData([]);
         Promise.all([
-            axios.get(`http://192.168.0.192:8080/api/quiz/getQuizQuesAns/${quizId}`),
-            axios.get(`http://192.168.0.192:8080/api/quiz/getResultAns/${resultId}`)
+            axios.get(`${baseUrl}/api/quiz/getQuizQuesAns/${quizId}`,
+            {
+                headers:{
+                    Authorization: `Bearer ${jwt}`,
+                }
+            }),
+            axios.get(`${baseUrl}/api/quiz/getResultAns/${resultId}`,
+            {
+                headers:{
+                    Authorization: `Bearer ${jwt}`,
+                }
+            })
         ]).then(([quizResponse, resultResponse]) => {
             const quizData = quizResponse.data;
             const userRes = resultResponse.data;

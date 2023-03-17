@@ -10,7 +10,7 @@ const Card = ({name, i, img, id, navigation, route, quizId}) => {
     const colourArray = ["#c2e8f7", "#f5e4b5", "#e1f5e9", "#e4cbff", "#4cd9a5"];
     const [showModel, setShowModel] = useState(false);
     const [inputText, setInputText] = useState("");
-    const {email} = useContext(TruthDareContext);
+    const {email,jwt,baseUrl} = useContext(TruthDareContext);
     const handleCardClick = () => {
         if (route === "ViewQuiz") {
             navigation.navigate("ViewQuiz", {
@@ -32,10 +32,15 @@ const Card = ({name, i, img, id, navigation, route, quizId}) => {
     };
     const handleJoinGroupApi = async () => {
         axios
-            .post(`http://192.168.0.192:8080/api/group/joinGroup`, {
+            .post(`${baseUrl}/api/group/joinGroup`, {
                 userEmail: email,
                 groupId: id,
                 code: inputText,
+            },
+            {
+                headers:{
+                    Authorization: `Bearer ${jwt}`,
+                }
             })
             .then(response => {
                 let toast = Toast.show(

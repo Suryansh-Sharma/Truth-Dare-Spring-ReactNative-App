@@ -1,8 +1,9 @@
 import axios from 'axios';
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {Image, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Card from '../components/Card';
 import Loader from '../components/Loader'
+import { TruthDareContext } from '../context/Context';
 import blackAddButton from "../images/blackAddButton.png";
 import forwardIcon2 from "../images/forwardIcon2.png";
 
@@ -11,6 +12,7 @@ const GroupDetails = ({route, navigation}) => {
     const [data, setData] = useState(null);
     const [isPageLoading, setIsLoading] = useState(true);
     const [lastSelect, setLastSelect] = useState("");
+    const {jwt,baseUrl} = useContext(TruthDareContext);
     const handleButtonClick = (value) => {
         if (lastSelect === "") {
             value === "members" ? handleApi("members") : handleApi("quizes");
@@ -43,7 +45,13 @@ const GroupDetails = ({route, navigation}) => {
         }
     );
     useEffect(() => {
-        axios.get(`http://192.168.0.192:8080/api/group/getById/${itemId}`)
+        axios.get(`${baseUrl}/api/group/getById/${itemId}`
+        ,
+            {
+                headers:{
+                    Authorization: `Bearer ${jwt}`,
+                }
+            })
             .then(function (response) {
                 setgroupData(response.data);
             })
@@ -59,7 +67,13 @@ const GroupDetails = ({route, navigation}) => {
     const handleApi = (type) => {
         setIsLoading(true);
         if (type === "RefreshCode") {
-            axios.post(`http://192.168.0.192:8080/api/group/changeGroupCode/${itemId}`)
+            axios.post(`http://192.168.0.192:8080/api/group/changeGroupCode/${itemId}`
+            ,
+            {
+                headers:{
+                    Authorization: `Bearer ${jwt}`,
+                }
+            })
                 .then(response => {
                     setgroupData(response.data);
                     setIsLoading(false);
@@ -73,7 +87,13 @@ const GroupDetails = ({route, navigation}) => {
                 url = "getUsers"
             else
                 url = "getQuizzes"
-            axios.get(`http://192.168.0.192:8080/api/group/${url}/${itemId}`)
+            axios.get(`http://192.168.0.192:8080/api/group/${url}/${itemId}`
+            ,
+            {
+                headers:{
+                    Authorization: `Bearer ${jwt}`,
+                }
+            })
                 .then(function (response) {
                     setData(response.data);
                     setIsLoading(false);

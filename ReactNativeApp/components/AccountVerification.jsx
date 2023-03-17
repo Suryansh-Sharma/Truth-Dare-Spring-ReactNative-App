@@ -8,12 +8,15 @@ import * as SecureStore from 'expo-secure-store';
 const AccountVerification = () => {
     const [seconds, setSeconds] = useState(59);
     const [showResend, setShowResend] = useState(false);
-    const {email, setIsVerified, isLogin} = useContext(TruthDareContext);
-    useEffect(() => {
-        sendAccountVerificationMail();
-    }, [])
+    const {email, setIsVerified, isLogin,baseUrl} = useContext(TruthDareContext);
+    // useEffect(() => {
+    //     // sendAccountVerificationMail();
+    // }, [])
     const sendAccountVerificationMail = () => {
-        alert(email);
+        axios.post(`${baseUrl}/api/auth/resend-verification-token/${email}`)
+        .catch(error=>{
+            console.log(error);
+        })
     }
     useEffect(() => {
         const interval = setInterval(() => {
@@ -33,12 +36,11 @@ const AccountVerification = () => {
     }, [seconds]);
     const handleResend = () => {
         setSeconds(59);
-        A
         setShowResend(false);
         sendAccountVerificationMail();
     }
     const handleContinue = async () => {
-        axios.get(`http://192.168.0.192:8080/api/user/isVerified/${email}`)
+        axios.get(`${baseUrl}/api/auth/isVerified/${email}`)
             .then(async response => {
                 if (response.data === true) {
                     await SecureStore.setItemAsync("isVerified", "true".replace(/"/g, ''));

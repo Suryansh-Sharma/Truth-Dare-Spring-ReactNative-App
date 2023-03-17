@@ -7,7 +7,7 @@ import com.suryansh.truthdareapi.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import java.time.Instant;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -19,8 +19,8 @@ public class AuthController {
     }
 
     @GetMapping("/test")
-    public Date testAuthController() {
-        return new Date(System.currentTimeMillis());
+    public Instant testAuthController() {
+        return Instant.now();
     }
 
     @PostMapping("/sign-up")

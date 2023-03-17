@@ -1,18 +1,25 @@
 import {Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View,} from "react-native";
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import searchIcon from "../images/searchIcon2.png";
 import Card from "../components/Card";
 import Loader from "../components/Loader";
 import axios from "axios";
+import { TruthDareContext } from "../context/Context";
 
 const SearchScreen = ({navigation}) => {
     const [data, setData] = useState(null);
     const [search, setSearch] = useState("");
     const [isLoading, setLoading] = useState(false);
+    const {jwt,baseUrl} = useContext(TruthDareContext);
     const handleSearchOption = () => {
         if (search === "") return setData(null);
         setLoading(true);
-        axios.get(`http://192.168.0.192:8080/api/group/getForNavSearch/${search}`)
+        axios.get(`${baseUrl}/api/group/getForNavSearch/${search}`,
+        {
+            headers:{
+                Authorization: `Bearer `+jwt,
+            }
+        })
             .then(response => {
                 setData(response.data);
                 setLoading(false);

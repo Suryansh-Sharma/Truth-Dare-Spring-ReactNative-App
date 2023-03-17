@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {Image, ScrollView, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View} from "react-native";
 import Loader from "../components/Loader";
 import Toast from "react-native-root-toast";
@@ -23,7 +23,7 @@ const Quiz = ({route, navigation}) => {
         option4: "",
     });
     const [options, setOptions] = useState([]);
-    const {username} = useContext(TruthDareContext);
+    const {username,jwt,baseUrl} = useContext(TruthDareContext);
 
     // Function that handle next button.
 
@@ -98,9 +98,15 @@ const Quiz = ({route, navigation}) => {
     };
     const handlePostQuiz = async () => {
         setLoading(true);
-        axios.post(`http://192.168.0.192:8080/api/quiz/save/${groupName}/${showResult}/${quizName}/${username}`,
+        axios.post(`${baseUrl}/api/quiz/save/${groupName}/${showResult}/${quizName}/${username}`
+        ,
+        {
+            quizzes: postData
+        },
             {
-                quizzes: postData
+                headers:{
+                    Authorization: `Bearer ${jwt}`,
+                }
             })
             .then(response => {
 

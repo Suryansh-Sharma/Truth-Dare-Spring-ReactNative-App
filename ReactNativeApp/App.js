@@ -9,7 +9,7 @@ import * as SecureStore from "expo-secure-store";
 import AccountVerification from "./components/AccountVerification";
 function App() {
   const [isLoading, setLoading] = useState();
-  const { isLogin, setLogin, setUsername, setEmail, setJwt, isVerified ,setIsVerified} =
+  const { isLogin, setLogin, setUsername, setEmail, setJwt, isVerified ,setIsVerified,baseUrl} =
     useContext(TruthDareContext);
   useEffect(() => {
     setLoading(true);
@@ -21,10 +21,11 @@ function App() {
     if (Login === "true") {
       let username = await SecureStore.getItemAsync("username");
       let email = await SecureStore.getItemAsync("email");
-      let jwt = await SecureStore.getItemAsync("jwt");
+      const jwtToken = await SecureStore.getItemAsync("jwt");
+
       let isVerified = await SecureStore.getItemAsync("isVerified");
       setEmail(email);
-      setJwt(jwt);
+      setJwt(jwtToken);
       setUsername(username);
       setLogin(true);
       if(isVerified==="true")

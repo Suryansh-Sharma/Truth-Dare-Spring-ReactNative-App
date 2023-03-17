@@ -4,6 +4,7 @@ import com.suryansh.truthdareapi.dto.GroupDto;
 import com.suryansh.truthdareapi.dto.QuizDto;
 import com.suryansh.truthdareapi.dto.ResultDto;
 import com.suryansh.truthdareapi.service.UserService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/user")
 @CrossOrigin("*")
+@SecurityRequirement(name = "bearerAuth")
 public class UserController {
     private final UserService userService;
 

@@ -17,7 +17,8 @@ const SignUpScreen = ({navigation}) => {
         setUsername,
         setEmail,
         setIsVerified,
-        setJwt
+        setJwt,
+        baseUrl
     } = useContext(TruthDareContext);
     const handleSignUp = () => {
         if (signUpData.email.length == 0)
@@ -30,7 +31,7 @@ const SignUpScreen = ({navigation}) => {
             handleSubmitApi();
     }
     const handleSubmitApi = async () => {
-        axios.post(`http://192.168.0.192:8080/api/user/sign-up`, signUpData)
+        axios.post(`${baseUrl}/api/user/sign-up`, signUpData)
             .then(async response => {
                 await SecureStore.setItemAsync("email", JSON.stringify(response.data.email).replace(/"/g, ''));
                 await SecureStore.setItemAsync("username", JSON.stringify(response.data.username).replace(/"/g, ''));

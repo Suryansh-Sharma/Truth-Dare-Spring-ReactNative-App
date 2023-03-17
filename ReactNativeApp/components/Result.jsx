@@ -10,12 +10,18 @@ let jsonData = require("../FakeApi/ResultFakeApi.json");
 const Result = ({route, navigation}) => {
     const {quizId} = route.params;
     const [isLoading, setLoading] = useState(true);
-    const {email} = useContext(TruthDareContext);
+    const {email,jwt,baseUrl} = useContext(TruthDareContext);
 
     const [data, setData] = useState([]);
     useEffect(() => {
         axios
-            .get(`http://192.168.0.192:8080/api/quiz/getResultOfQuiz/${quizId}`)
+            .get(`${baseUrl}/api/quiz/getResultOfQuiz/${quizId}`
+            ,
+            {
+                headers:{
+                    Authorization: `Bearer ${jwt}`,
+                }
+            })
             .then((response) => {
                 setData(response.data);
             })

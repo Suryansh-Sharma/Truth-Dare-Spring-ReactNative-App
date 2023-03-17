@@ -11,13 +11,14 @@ const UserAccountScreen = ({navigation}) => {
     const [data, setData] = useState([]);
     const [lastSelect, setLastSelect] = useState("");
     const {
-        isLogin,
         setLogin,
         username,
         setUsername,
         email,
         setEmail,
-        setJwt
+        setJwt,
+        jwt,
+        baseUrl
     } = useContext(TruthDareContext);
 
 
@@ -51,7 +52,13 @@ const UserAccountScreen = ({navigation}) => {
             url = `groups`;
         else if (val === "quizes")
             url = `quizzes`;
-        axios.get(`http://192.168.0.192:8080/api/user/${url}/${email}`)
+        axios.get(`${baseUrl}/api/user/${url}/${email}`
+        ,
+            {
+                headers:{
+                    Authorization: `Bearer ${jwt}`,
+                }
+            })
             .then(response => {
                 setData(response.data);
                 if (response.data.length === 0) alert("No data found !!");

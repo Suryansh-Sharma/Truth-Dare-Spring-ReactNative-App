@@ -12,7 +12,7 @@ const HomeScreen = ({navigation}) => {
     const [data, setData] = useState(null);
     const [lastSelect, setLastSelect] = useState("");
     const [isPageLoading, setIsLoading] = useState(false);
-    const {username, email} = useContext(TruthDareContext);
+    const {username, email,jwt,baseUrl} = useContext(TruthDareContext);
     useEffect(() => {
     }, [])
     const handleTopCardClick = (value) => {
@@ -44,7 +44,13 @@ const HomeScreen = ({navigation}) => {
         else url = `user/getTopResults/${email}`;
 
         axios
-            .get(`http://192.168.0.192:8080/api/${url}`)
+            .get(`${baseUrl}/api/${url}`
+            ,
+            {
+                headers:{
+                    Authorization: `Bearer ${jwt}`,
+                }
+            })
             .then(function (response) {
                 setData(response.data);
                 setIsLoading(false);

@@ -16,7 +16,7 @@ const ViewQuiz = ({route, navigation}) => {
     const [choice, setChoice] = useState("");
     const [cuurentOption, setCurrentOption] = useState(0);
     const [isPageLoading, setIsLoading] = useState(true);
-    const {email} = useContext(TruthDareContext);
+    const {email,jwt,baseUrl} = useContext(TruthDareContext);
 
     const handleSelectOption = (option, choice) => {
         if (isFinalPage)
@@ -53,7 +53,13 @@ const ViewQuiz = ({route, navigation}) => {
 
         axios
             .get(
-                `http://192.168.0.192:8080/api/quiz/attemptQuiz/${quizId}/${email}`
+                `${baseUrl}/api/quiz/attemptQuiz/${quizId}/${email}`
+                ,
+            {
+                headers:{
+                    Authorization: `Bearer ${jwt}`,
+                }
+            }
             )
             .then((reponse) => {
                 setData(reponse.data);
@@ -73,10 +79,15 @@ const ViewQuiz = ({route, navigation}) => {
         setIsLoading(true);
         let email = await SecureStore.getItemAsync('email');
 
-        axios.post(`http://192.168.0.192:8080/api/quiz/submitQuiz`, {
+        axios.post(`${baseUrl}/api/quiz/submitQuiz`, {
             quizId: quizId,
             userEmail: email,
             selectedOptions: selectedOptions,
+        },
+        {
+            headers:{
+                Authorization: `Bearer ${jwt}`,
+            }
         })
             .then(response => {
                 console.log(response)

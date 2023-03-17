@@ -5,6 +5,7 @@ import com.suryansh.truthdareapi.dto.QuizDto;
 import com.suryansh.truthdareapi.dto.UserDto;
 import com.suryansh.truthdareapi.model.JoinGroupModel;
 import com.suryansh.truthdareapi.service.GroupService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,6 +14,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/group")
 @CrossOrigin("*")
+@SecurityRequirement(name = "bearerAuth")
 public class GroupController {
     private final GroupService groupService;
     public GroupController(GroupService groupService){

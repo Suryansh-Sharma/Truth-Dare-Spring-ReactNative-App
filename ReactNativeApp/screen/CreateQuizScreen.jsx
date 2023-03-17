@@ -17,7 +17,7 @@ const CreateQuizScreen = ({navigation}) => {
     const [isGroupPresent, setGroupPresent] = useState(true);
     const [userGroups, setGroups] = useState([]);
     const [loading, isLoading] = useState(false);
-    const {email} = useContext(TruthDareContext);
+    const {email,jwt,baseUrl} = useContext(TruthDareContext);
     const handleNavigation = () => {
         if (data.groupName === "") return alert("Group Can't be empty");
         if (!isGroupPresent) return handleCreateGroup();
@@ -34,7 +34,11 @@ const CreateQuizScreen = ({navigation}) => {
     };
     const handleCreateGroup = async () => {
         axios
-            .post(`http://192.168.0.192:8080/api/group/addNewGroup/${data.groupName}/${email}`)
+            .post(`${baseUrl}/api/group/addNewGroup/${data.groupName}/${email}`,{},{
+                headers:{
+                    Authorization: `Bearer `+jwt,
+                }
+            })
             .then(() => {
                 let toast = Toast.show(
                     <View style={styles.ToastCard}>
@@ -52,6 +56,7 @@ const CreateQuizScreen = ({navigation}) => {
                 setGroupPresent(true);
             })
             .catch((error) => {
+                console.log(error);
                 let toast = Toast.show("Request failed to send.", {
                     duration: Toast.durations.SHORT,
                     position: Toast.positions.TOP,
@@ -84,7 +89,13 @@ const CreateQuizScreen = ({navigation}) => {
         isLoading(false);
     }, []);
     const loadNavData = async () => {
-        axios.get(`http://192.168.0.192:8080/api/user/groups/${email}`)
+        axios.get(`${baseUrl}/api/user/groups/${email}`
+        ,
+            {
+                headers:{
+                    Authorization: `Bearer ${jwt}`,
+                }
+            })
             .then(response => {
                 setGroups(response.data)
             })
